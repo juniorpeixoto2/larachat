@@ -31,9 +31,7 @@ export default {
             return axios
                 .get("/api/v1/messages/" + state.userConversation.id)
                 .then((response) => {
-                    console.log("change");
-
-                    commit("ADD_USER_MESSAGES", response.data);
+                    commit("ADD_USER_MESSAGES", response.data.data);
                 });
         },
     },

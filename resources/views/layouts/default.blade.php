@@ -8,9 +8,16 @@
     <meta name="csrf-token" content="{{ csrf_token() }}">
     <link href="{{ url('css/app.css') }}" rel="stylesheet">
     <link href="{{ url('css/chat.css') }}" rel="stylesheet">
+
+    <script>
+        window.Laravel = <?php echo json_encode(['user' => auth()->check() ? auth()->user()->id : null]) ?>
+    </script>
 </head>
 
 <body>
+
+
+
 
     <div id="app">
         @yield('content')

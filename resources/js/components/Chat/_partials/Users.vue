@@ -84,7 +84,6 @@
 
 import { mapActions, mapState, mapGetters, mapMutations } from "vuex";
 
-
 export default {
 
   mounted() {

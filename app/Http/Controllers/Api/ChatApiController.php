@@ -4,6 +4,7 @@ namespace App\Http\Controllers\Api;
 
 use App\Events\NewMessageCreated;
 use App\Http\Controllers\Controller;
+use App\Http\Resources\MessagesResource;
 use App\Models\Message;
 use Illuminate\Http\Request;
 
@@ -27,6 +28,6 @@ class ChatApiController extends Controller {
 
     public function my_messages(Request $request, Message $message, $other_id) {
         $messages = $message->messages($other_id);
-        return response()->json($messages);
+        return MessagesResource::collection($messages);
     }
 }

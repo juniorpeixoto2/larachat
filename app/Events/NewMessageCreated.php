@@ -3,6 +3,7 @@
 namespace App\Events;
 
 use App\Http\Resources\MessageResource;
+use App\Http\Resources\MessagesResource;
 use App\Models\Message;
 use Illuminate\Broadcasting\Channel;
 use Illuminate\Broadcasting\InteractsWithSockets;
@@ -34,7 +35,7 @@ class NewMessageCreated implements ShouldBroadcast {
      */
     public function broadcastWith() {
         return [
-            // 'message' => (new MessageResource($this->message))->resolve()
+            'message' => (new MessagesResource($this->message))->resolve()
         ];
     }
 
@@ -46,7 +47,7 @@ class NewMessageCreated implements ShouldBroadcast {
     public function broadcastOn() {
         return [
             new Channel('chatroom'),
-            // new PrivateChannel('chat.' . $this->message->receiver_id),
+            new PrivateChannel('chat.' . $this->message->receiver_id),
         ];
     }
 }

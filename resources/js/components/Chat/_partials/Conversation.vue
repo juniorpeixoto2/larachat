@@ -1,5 +1,5 @@
 <template>
-  <div class="chat-window is-active">
+  <div class="chat-window is-active" v-if="userActive != null" >
     <div class="chat-window__wrapper">
       <!-- chat header -->
       <div
@@ -34,10 +34,10 @@
           <div class="flex flex-col leading-tight">
             <div class="mt-1 flex items-center">
               <span class="text-lg font-medium text-gray-700 mr-3">{{
-                "Carlos Ferreira"
+                userActive.name
               }}</span>
             </div>
-            <span class="text-sm text-muted">Junior Developer</span>
+            <span class="text-sm text-muted">{{ userActive.email }}</span>
           </div>
         </div>
         <div class="flex items-center space-x-2">
@@ -66,7 +66,11 @@
         <!-- chat msgs  -->
         <div class="chat-window__messages-inner">
           <div class="chat-messages">
-            <div class="his-message">
+            
+            <div v-for="(message,index) in messages" :key="index"
+            :class="[message.me ? 'his-message':'my-message'] ">
+            
+            
               <div class="inner">
                 <div class="profile">
                   <img
@@ -76,105 +80,14 @@
                   />
                 </div>
                 <div class="ballon-text">
-                  <div>Hey How are you today?</div>
+                  <div>{{ message.message }}</div>
                 </div>
               </div>
             </div>
-            <div class="his-message">
-              <div class="inner">
-                <div class="profile">
-                  <img
-                    src="https://images.unsplash.com/photo-1549078642-b2ba4bda0cdb?ixlib=rb-1.2.1&amp;ixid=eyJhcHBfaWQiOjEyMDd9&amp;auto=format&amp;fit=facearea&amp;facepad=3&amp;w=144&amp;h=144"
-                    alt=""
-                    class="w-10 h-10 rounded-full"
-                  />
-                </div>
-                <div class="ballon-text">
-                  <div>
-                    Lorem ipsum dolor sit amet, consectetur adipisicing elit.
-                    Vel ipsa commodi illum saepe numquam maxime asperiores
-                    voluptate sit, minima perspiciatis.
-                  </div>
-                </div>
-              </div>
-            </div>
-            <div class="my-message">
-              <div class="inner">
-                <div class="profile">
-                  <img
-                    src="https://images.unsplash.com/photo-1549078642-b2ba4bda0cdb?ixlib=rb-1.2.1&amp;ixid=eyJhcHBfaWQiOjEyMDd9&amp;auto=format&amp;fit=facearea&amp;facepad=3&amp;w=144&amp;h=144"
-                    alt=""
-                    class="w-10 h-10 rounded-full"
-                  />
-                </div>
-                <div class="ballon-text">
-                  <div>I'm ok what about you?</div>
-                </div>
-              </div>
-            </div>
-            <div class="my-message">
-              <div class="inner">
-                <div class="profile">
-                  <img
-                    src="https://images.unsplash.com/photo-1549078642-b2ba4bda0cdb?ixlib=rb-1.2.1&amp;ixid=eyJhcHBfaWQiOjEyMDd9&amp;auto=format&amp;fit=facearea&amp;facepad=3&amp;w=144&amp;h=144"
-                    alt=""
-                    class="w-10 h-10 rounded-full"
-                  />
-                </div>
-                <div class="ballon-text">
-                  <div>
-                    Lorem ipsum dolor sit, amet consectetur adipisicing. ?
-                  </div>
-                </div>
-              </div>
-            </div>
-            <div class="his-message">
-              <div class="inner">
-                <div class="profile">
-                  <img
-                    src="https://images.unsplash.com/photo-1549078642-b2ba4bda0cdb?ixlib=rb-1.2.1&amp;ixid=eyJhcHBfaWQiOjEyMDd9&amp;auto=format&amp;fit=facearea&amp;facepad=3&amp;w=144&amp;h=144"
-                    alt=""
-                    class="w-10 h-10 rounded-full"
-                  />
-                </div>
-                <div class="ballon-text">
-                  <div>Lorem ipsum dolor sit amet !</div>
-                </div>
-              </div>
-            </div>
-            <div class="my-message">
-              <div class="inner">
-                <div class="profile">
-                  <img
-                    src="https://images.unsplash.com/photo-1549078642-b2ba4bda0cdb?ixlib=rb-1.2.1&amp;ixid=eyJhcHBfaWQiOjEyMDd9&amp;auto=format&amp;fit=facearea&amp;facepad=3&amp;w=144&amp;h=144"
-                    alt=""
-                    class="w-10 h-10 rounded-full"
-                  />
-                </div>
-                <div class="ballon-text">
-                  <div>
-                    Lorem ipsum dolor sit, amet consectetur adipisicing. ?
-                  </div>
-                </div>
-              </div>
-            </div>
-            <div class="his-message">
-              <div class="inner">
-                <div class="profile">
-                  <img
-                    src="https://images.unsplash.com/photo-1549078642-b2ba4bda0cdb?ixlib=rb-1.2.1&amp;ixid=eyJhcHBfaWQiOjEyMDd9&amp;auto=format&amp;fit=facearea&amp;facepad=3&amp;w=144&amp;h=144"
-                    alt=""
-                    class="w-10 h-10 rounded-full"
-                  />
-                </div>
-                <div class="ballon-text">
-                  <div>
-                    Lorem ipsum dolor sit amet consectetur adipisicing elit.
-                    Perspiciatis, in.
-                  </div>
-                </div>
-              </div>
-            </div>
+            
+
+
+            <!-- messages -->
           </div>
         </div>
         <!-- footer envia mensagem -->
@@ -239,5 +152,18 @@
 </template>
 
 <script>
-export default {};
+import { mapActions, mapState, mapGetters, mapMutations } from "vuex";
+
+export default {
+  computed: {
+    ...mapState({
+      userActive: (state) => state.chats.userConversation,
+      messages: (state) => state.chats.messages,
+  }),  
+  },
+
+
+
+  
+};
 </script>

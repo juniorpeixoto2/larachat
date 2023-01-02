@@ -1,20 +1,19 @@
-window._ = require('lodash');
+window._ = require("lodash");
 
 try {
-    require('bootstrap');
+    require("bootstrap");
 } catch (e) {}
 
+window.axios = require("axios");
+window.axios.defaults.headers.common["X-Requested-With"] = "XMLHttpRequest";
 
-window.axios = require('axios');
-window.axios.defaults.headers.common['X-Requested-With'] = 'XMLHttpRequest';
+import Echo from "laravel-echo";
 
-import Echo from 'laravel-echo';
-
-window.io = require('socket.io-client')
+window.io = require("socket.io-client");
 
 window.Echo = new Echo({
-    broadcaster: 'socket.io',
-    host: window.location.hostname + ':6001'
+    broadcaster: "socket.io",
+    host: window.location.hostname + ":6001",
 });
 
-require('./Echo')
+require("./Echo");
