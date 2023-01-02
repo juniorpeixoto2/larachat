@@ -78,24 +78,29 @@
 </template>
 
 <script>
+
+import { mapActions, mapState } from "vuex";
+
 export default {
+
+  mounted() {
+    this.getUsers();
+  },
+
+  computed: {
+    ...mapState({
+      users: (state) => state.users.users,
+    }),
+  },
+
   data() {
     return {
       selected: "inbox",
       activeChat: 0,
-      users: [
-        {
-          id: 1,
-          name: "Carlos",
-          label: "Novas Mensagens",
-        },
-        {
-          id: 2,
-          name: "Outro User",
-          label: "Novas Mensagens",
-        },
-      ],
     };
+  },
+  methods: {
+    ...mapActions(["getUsers"]),
   },
 };
 </script>

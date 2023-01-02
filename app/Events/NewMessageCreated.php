@@ -46,7 +46,7 @@ class NewMessageCreated implements ShouldBroadcast {
     public function broadcastOn() {
         return [
             new Channel('chatroom'),
-            new PrivateChannel('chat.' . $this->message->receiver_id),
+            // new PrivateChannel('chat.' . $this->message->receiver_id),
         ];
     }
 }
