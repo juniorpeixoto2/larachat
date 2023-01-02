@@ -8,6 +8,7 @@
         <input
           type="search"
           name="serch"
+          v-model="filter"
           placeholder="Search"
           class="w-full bg-gray-100 h-10 px-5 pr-10 rounded-full text-sm focus:outline-none focus:shadow-lg focus:bg-white hover:shadow-md"
         />
@@ -35,7 +36,7 @@
     </div>
     <!-- users -->
     <ul class="flex flex-col chat-list">
-      <div v-for="(user, index) in users.data" :key="index">
+      <div v-for="(user, index) in users" :key="index">
         <li
           class="bg-white hover:bg-gray-100 border-b p-4 cursor-pointer"
           :class="{ 'is-active': activeChat === index }"
@@ -48,7 +49,7 @@
                 class="w-12 h-12 rounded-full"
               />
               <span
-                class="text-green-500 absolute -bottom-0.5 -right-0.5 rounded-full bg-white border-white border-4"
+                class="text-green-500  absolute -bottom-0.5 -right-0.5 rounded-full bg-white border-white border-4"
               >
                 <svg width="10" height="10">
                   <circle cx="5" cy="5" r="5" fill="currentColor"></circle>
@@ -61,6 +62,7 @@
               </div>
               <span class="text-sm text-truncate text-muted-alt">
                 {{ user.label }}
+                 {{ user.online ? 'On-line' :'' }}
               </span>
             </div>
             <time class="absolute top-0 right-0 text-xs font-medium text-muted"
@@ -79,7 +81,8 @@
 
 <script>
 
-import { mapActions, mapState } from "vuex";
+import { mapActions, mapState, mapGetters } from "vuex";
+import users from "../../../vuex/modules/users";
 
 export default {
 
@@ -88,9 +91,24 @@ export default {
   },
 
   computed: {
-    ...mapState({
-      users: (state) => state.users.users
-    })
+    // ...mapState({
+    //   users: (state) => state.users.users
+    // })
+
+    ...mapGetters({
+      allUsers : 'sortedUsers',
+    }),
+
+    users() {
+      return this.allUsers.filter(user => {
+        if (this.filter == '') {
+          return user; 
+        }
+
+
+        return user.name.includes(this.filter) || user.email === this.filter
+      })
+    }
   },
 
 
@@ -98,6 +116,7 @@ export default {
     return {
       selected: "inbox",
       activeChat: 0,
+      filter: ''
       
     };
   },

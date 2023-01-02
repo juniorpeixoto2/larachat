@@ -5456,7 +5456,8 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony export */ __webpack_require__.d(__webpack_exports__, {
 /* harmony export */   "default": () => (__WEBPACK_DEFAULT_EXPORT__)
 /* harmony export */ });
-/* harmony import */ var vuex__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! vuex */ "./node_modules/vuex/dist/vuex.esm.js");
+/* harmony import */ var vuex__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! vuex */ "./node_modules/vuex/dist/vuex.esm.js");
+/* harmony import */ var _vuex_modules_users__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ../../../vuex/modules/users */ "./resources/js/vuex/modules/users/index.js");
 function _typeof(obj) { "@babel/helpers - typeof"; return _typeof = "function" == typeof Symbol && "symbol" == typeof Symbol.iterator ? function (obj) { return typeof obj; } : function (obj) { return obj && "function" == typeof Symbol && obj.constructor === Symbol && obj !== Symbol.prototype ? "symbol" : typeof obj; }, _typeof(obj); }
 function ownKeys(object, enumerableOnly) { var keys = Object.keys(object); if (Object.getOwnPropertySymbols) { var symbols = Object.getOwnPropertySymbols(object); enumerableOnly && (symbols = symbols.filter(function (sym) { return Object.getOwnPropertyDescriptor(object, sym).enumerable; })), keys.push.apply(keys, symbols); } return keys; }
 function _objectSpread(target) { for (var i = 1; i < arguments.length; i++) { var source = null != arguments[i] ? arguments[i] : {}; i % 2 ? ownKeys(Object(source), !0).forEach(function (key) { _defineProperty(target, key, source[key]); }) : Object.getOwnPropertyDescriptors ? Object.defineProperties(target, Object.getOwnPropertyDescriptors(source)) : ownKeys(Object(source)).forEach(function (key) { Object.defineProperty(target, key, Object.getOwnPropertyDescriptor(source, key)); }); } return target; }
@@ -5464,22 +5465,32 @@ function _defineProperty(obj, key, value) { key = _toPropertyKey(key); if (key i
 function _toPropertyKey(arg) { var key = _toPrimitive(arg, "string"); return _typeof(key) === "symbol" ? key : String(key); }
 function _toPrimitive(input, hint) { if (_typeof(input) !== "object" || input === null) return input; var prim = input[Symbol.toPrimitive]; if (prim !== undefined) { var res = prim.call(input, hint || "default"); if (_typeof(res) !== "object") return res; throw new TypeError("@@toPrimitive must return a primitive value."); } return (hint === "string" ? String : Number)(input); }
 
+
 /* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = ({
   mounted: function mounted() {
     this.getUsers();
   },
-  computed: _objectSpread({}, (0,vuex__WEBPACK_IMPORTED_MODULE_0__.mapState)({
-    users: function users(state) {
-      return state.users.users;
+  computed: _objectSpread(_objectSpread({}, (0,vuex__WEBPACK_IMPORTED_MODULE_1__.mapGetters)({
+    allUsers: 'sortedUsers'
+  })), {}, {
+    users: function users() {
+      var _this = this;
+      return this.allUsers.filter(function (user) {
+        if (_this.filter == '') {
+          return user;
+        }
+        return user.name.includes(_this.filter) || user.email === _this.filter;
+      });
     }
-  })),
+  }),
   data: function data() {
     return {
       selected: "inbox",
-      activeChat: 0
+      activeChat: 0,
+      filter: ''
     };
   },
-  methods: _objectSpread({}, (0,vuex__WEBPACK_IMPORTED_MODULE_0__.mapActions)(["getUsers"]))
+  methods: _objectSpread({}, (0,vuex__WEBPACK_IMPORTED_MODULE_1__.mapActions)(["getUsers"]))
 });
 
 /***/ }),
@@ -5913,11 +5924,26 @@ var render = function render() {
   }, [_vm._v("\n      Conversas\n    ")]), _vm._v(" "), _c("div", {
     staticClass: "relative my-5 text-gray-600"
   }, [_c("input", {
+    directives: [{
+      name: "model",
+      rawName: "v-model",
+      value: _vm.filter,
+      expression: "filter"
+    }],
     staticClass: "w-full bg-gray-100 h-10 px-5 pr-10 rounded-full text-sm focus:outline-none focus:shadow-lg focus:bg-white hover:shadow-md",
     attrs: {
       type: "search",
       name: "serch",
       placeholder: "Search"
+    },
+    domProps: {
+      value: _vm.filter
+    },
+    on: {
+      input: function input($event) {
+        if ($event.target.composing) return;
+        _vm.filter = $event.target.value;
+      }
     }
   }), _vm._v(" "), _c("button", {
     staticClass: "absolute right-0 top-0 mt-3 mr-4",
@@ -5947,7 +5973,7 @@ var render = function render() {
     }
   })])])])]), _vm._v(" "), _c("ul", {
     staticClass: "flex flex-col chat-list"
-  }, _vm._l(_vm.users.data, function (user, index) {
+  }, _vm._l(_vm.users, function (user, index) {
     return _c("div", {
       key: index
     }, [_c("li", {
@@ -5987,7 +6013,7 @@ var render = function render() {
       staticClass: "text-gray-700 mr-3"
     }, [_vm._v(_vm._s(user.name))])]), _vm._v(" "), _c("span", {
       staticClass: "text-sm text-truncate text-muted-alt"
-    }, [_vm._v("\n              " + _vm._s(user.label) + "\n            ")])]), _vm._v(" "), _c("time", {
+    }, [_vm._v("\n              " + _vm._s(user.label) + "\n               " + _vm._s(user.online ? "On-line" : "") + "\n            ")])]), _vm._v(" "), _c("time", {
       staticClass: "absolute top-0 right-0 text-xs font-medium text-muted"
     }, [_vm._v("22/02/2024")]), _vm._v(" "), _c("span", {
       staticClass: "absolute bottom-0 right-0 text-xs font-medium bg-indigo-500 text-white text-circle"
@@ -6170,7 +6196,7 @@ __webpack_require__.r(__webpack_exports__);
 
     //sorted
     users = users.sort(function (user) {
-      var index = onlineUsers.fidIndex(function (u) {
+      var index = onlineUsers.findIndex(function (u) {
         return u.email === user.email;
       });
       return index === -1 ? 1 : -1;
@@ -6178,7 +6204,7 @@ __webpack_require__.r(__webpack_exports__);
 
     //Map online
     users = users.map(function (user) {
-      var index = onlineUsers.fidIndex(function (u) {
+      var index = onlineUsers.findIndex(function (u) {
         return u.email === user.email;
       });
       user.online = index != -1;
@@ -6236,8 +6262,8 @@ __webpack_require__.r(__webpack_exports__);
   ADD_ONLINE_USERS: function ADD_ONLINE_USERS(state, users) {
     state.onlineUsers = users;
   },
-  ADD_ONLINE_USER: function ADD_ONLINE_USER(state, users) {
-    state.onlineUsers.unshift();
+  ADD_ONLINE_USER: function ADD_ONLINE_USER(state, user) {
+    state.onlineUsers.unshift(user);
   },
   REMOVE_ONLINE_USER: function REMOVE_ONLINE_USER(state, user) {
     state.onlineUsers = state.onlineUsers.filter(function (u) {

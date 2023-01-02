@@ -7,8 +7,8 @@ export default {
       state.onlineUsers = users  
     },
 
-    ADD_ONLINE_USER(state, users) {
-      state.onlineUsers.unshift()
+    ADD_ONLINE_USER(state, user) {
+      state.onlineUsers.unshift(user)
     },
 
     REMOVE_ONLINE_USER(state, user) {

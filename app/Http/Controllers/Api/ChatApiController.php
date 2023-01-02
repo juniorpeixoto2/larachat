@@ -25,8 +25,8 @@ class ChatApiController extends Controller {
         return response()->json($message);
     }
 
-    public function show(Request $request, Message $message, $id) {
-        $messages = $message->messages($id);
+    public function my_messages(Request $request, Message $message, $other_id) {
+        $messages = $message->messages($other_id);
         return response()->json($messages);
     }
 }

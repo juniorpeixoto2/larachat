@@ -9,7 +9,7 @@ console.log(state.users.data)
 
         //sorted
         users = users.sort(user => {
-            const index = onlineUsers.fidIndex(u => u.email === user.email)
+            const index = onlineUsers.findIndex(u => u.email === user.email)
             
             return index === -1 ? 1 : -1;
         })
@@ -17,7 +17,7 @@ console.log(state.users.data)
 
         //Map online
         users = users.map(user => {
-            const index = onlineUsers.fidIndex(u => u.email === user.email)
+            const index = onlineUsers.findIndex(u => u.email === user.email)
 
             user.online = index != -1
             

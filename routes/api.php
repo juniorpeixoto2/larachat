@@ -16,7 +16,7 @@ Route::prefix('v1')
         Route::get('/users', [UserApiController::class, 'index']);
 
         Route::get('/messages/create', [ChatApiController::class, 'store']);
-        Route::get('/messages/{id}', [ChatApiController::class, 'show']);
+        Route::get('/messages/{id}', [ChatApiController::class, 'my_messages']);
     });
 
 

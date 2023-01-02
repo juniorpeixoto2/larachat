@@ -18,8 +18,12 @@ Route::get('/', function () {
     return view('welcome');
 });
 
+Route::get('/login', [ChatController::class, 'login'])->name('login');
 
-Route::get('/chat', [ChatController::class, 'index']);
+
+Route::middleware('auth')->group(function () {
+    Route::get('/chat', [ChatController::class, 'index']);
+});
 
 Auth::routes();
 
