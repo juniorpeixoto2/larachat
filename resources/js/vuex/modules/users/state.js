@@ -1,6 +1,6 @@
 export default {
     users: {
-        data: []
+        data: [],
     },
-    onlineUsers: []
-}
+    onlineUsers: [],
+};

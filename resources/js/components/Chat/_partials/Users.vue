@@ -38,8 +38,9 @@
     <ul class="flex flex-col chat-list">
       <div v-for="(user, index) in users" :key="index">
         <li
-          class="bg-white hover:bg-gray-100 border-b p-4 cursor-pointer"
-          :class="{ 'is-active': activeChat === index }"
+          class="hover:bg-gray-100 border-b p-4 cursor-pointer "
+          :class="{ 'is-active': activeChat === user.id }"
+          @click.prevent="openChatWithUser(user)" 
         >
           <div class="flex items-center relative">
             <div class="relative">
@@ -81,8 +82,8 @@
 
 <script>
 
-import { mapActions, mapState, mapGetters } from "vuex";
-import users from "../../../vuex/modules/users";
+import { mapActions, mapState, mapGetters, mapMutations } from "vuex";
+
 
 export default {
 
@@ -91,11 +92,8 @@ export default {
   },
 
   computed: {
-    // ...mapState({
-    //   users: (state) => state.users.users
-    // })
 
-    ...mapGetters({
+  ...mapGetters({
       allUsers : 'sortedUsers',
     }),
 
@@ -105,12 +103,10 @@ export default {
           return user; 
         }
 
-
         return user.name.includes(this.filter) || user.email === this.filter
       })
     }
   },
-
 
   data() {
     return {
@@ -121,7 +117,15 @@ export default {
     };
   },
   methods: {
-    ...mapActions(["getUsers"]),
+    ...mapActions(["getUsers",'getMessages']),
+
+    ...mapMutations({ addUserChat: 'ADD_USER_CONVERSATION' }),
+
+    openChatWithUser(user) {
+      this.activeChat = user.id;
+      this.addUserChat(user);
+      this.getMessages();
+    }
   },
 };
 </script>
