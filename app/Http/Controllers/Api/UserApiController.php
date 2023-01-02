@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\Api;
 
 use App\Http\Controllers\Controller;
+use App\Http\Resources\UsersResource;
 use App\Models\User;
 use Illuminate\Http\Request;
 
@@ -19,6 +20,6 @@ class UserApiController extends Controller {
             ->where('id', '!=', $request->user()->id)
             ->get();
 
-        return response()->json($users);
+        return UsersResource::collection($users);
     }
 }

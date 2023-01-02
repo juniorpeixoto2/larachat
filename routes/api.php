@@ -11,8 +11,7 @@ Route::get('/', function () {
 
 
 Route::prefix('v1')
-    // ->middleware(['web'])
-    ->middleware(['auth:web'])
+    ->middleware(['auth', 'web'])
     ->group(function () {
         Route::get('/users', [UserApiController::class, 'index']);
 

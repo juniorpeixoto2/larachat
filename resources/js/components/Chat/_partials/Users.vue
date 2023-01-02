@@ -35,7 +35,7 @@
     </div>
     <!-- users -->
     <ul class="flex flex-col chat-list">
-      <div v-for="(user, index) in users" :key="index">
+      <div v-for="(user, index) in users.data" :key="index">
         <li
           class="bg-white hover:bg-gray-100 border-b p-4 cursor-pointer"
           :class="{ 'is-active': activeChat === index }"
@@ -89,14 +89,16 @@ export default {
 
   computed: {
     ...mapState({
-      users: (state) => state.users.users,
-    }),
+      users: (state) => state.users.users
+    })
   },
+
 
   data() {
     return {
       selected: "inbox",
       activeChat: 0,
+      
     };
   },
   methods: {
