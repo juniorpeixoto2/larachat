@@ -128,8 +128,10 @@
                 class="flex items-center justify-center bg-indigo-500 hover:bg-indigo-600 rounded-xl text-white px-4 py-1 flex-shrink-0"
               @click.prevent="sendMessage"
               type="submit"
+              :disabled="sending"
               >
-                <span>Enviar</span>
+                <span v-if="sending">Enviando..</span>
+                <span v-else>Enviar</span>
                 <span class="ml-2">
                   <svg
                     class="w-4 h-4 transform rotate-45 -mt-px"
@@ -168,6 +170,7 @@ export default {
   data() {
     return {
       message : null,
+      sending : false,
     }
   },
 
@@ -186,7 +189,12 @@ export default {
       }, 10);
     },
     sendMessage() {
-      this.sendNewMessage(this.message)
+      this.sending = true;
+      this.sendNewMessage(this.message).then(response => {
+        this.message = '';
+      }).finally(response => {
+        this.sending = false;
+      });
     }
   },
   watch: {

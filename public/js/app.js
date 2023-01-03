@@ -5439,7 +5439,8 @@ function _toPrimitive(input, hint) { if (_typeof(input) !== "object" || input ==
   })),
   data: function data() {
     return {
-      message: null
+      message: null,
+      sending: false
     };
   },
   methods: _objectSpread(_objectSpread({}, (0,vuex__WEBPACK_IMPORTED_MODULE_0__.mapActions)(['sendNewMessage'])), {}, {
@@ -5454,7 +5455,13 @@ function _toPrimitive(input, hint) { if (_typeof(input) !== "object" || input ==
       }, 10);
     },
     sendMessage: function sendMessage() {
-      this.sendNewMessage(this.message);
+      var _this2 = this;
+      this.sending = true;
+      this.sendNewMessage(this.message).then(function (response) {
+        _this2.message = '';
+      })["finally"](function (response) {
+        _this2.sending = false;
+      });
     }
   }),
   watch: {
@@ -5718,7 +5725,8 @@ var render = function render() {
   }, [_c("button", {
     staticClass: "flex items-center justify-center bg-indigo-500 hover:bg-indigo-600 rounded-xl text-white px-4 py-1 flex-shrink-0",
     attrs: {
-      type: "submit"
+      type: "submit",
+      disabled: _vm.sending
     },
     on: {
       click: function click($event) {
@@ -5726,7 +5734,7 @@ var render = function render() {
         return _vm.sendMessage.apply(null, arguments);
       }
     }
-  }, [_c("span", [_vm._v("Enviar")]), _vm._v(" "), _c("span", {
+  }, [_vm.sending ? _c("span", [_vm._v("Enviando..")]) : _c("span", [_vm._v("Enviar")]), _vm._v(" "), _c("span", {
     staticClass: "ml-2"
   }, [_c("svg", {
     staticClass: "w-4 h-4 transform rotate-45 -mt-px",
