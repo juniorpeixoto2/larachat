@@ -42,7 +42,8 @@
         </div>
         <div class="flex items-center space-x-2">
           <button
-            type="button"
+          
+            type="submit"
             class="inline-flex items-center justify-center rounded-full h-10 w-10 transition duration-500 ease-in-out text-gray-500 hover:bg-gray-300 focus:outline-none"
           >
             <svg
@@ -64,11 +65,11 @@
       </div>
       <div class="chat-window__messages-wrapper">
         <!-- chat msgs  -->
-        <div class="chat-window__messages-inner">
+        <div class="chat-window__messages-inner" ref="messages">
           <div class="chat-messages">
             
             <div v-for="(message,index) in messages" :key="index"
-            :class="[message.me ? 'his-message':'my-message'] ">
+            :class="[message.me ? 'my-message':'his-message'] ">
             
             
               <div class="inner">
@@ -116,6 +117,7 @@
             <div class="flex-grow ml-4">
               <div class="relative w-full">
                 <input
+                v-model="message"
                   type="text"
                   class="flex w-full border rounded-xl focus:outline-none focus:border-indigo-300 pl-4 h-10"
                 />
@@ -124,6 +126,8 @@
             <div class="ml-4">
               <button
                 class="flex items-center justify-center bg-indigo-500 hover:bg-indigo-600 rounded-xl text-white px-4 py-1 flex-shrink-0"
+              @click.prevent="sendMessage"
+              type="submit"
               >
                 <span>Enviar</span>
                 <span class="ml-2">
@@ -161,8 +165,35 @@ export default {
       messages: (state) => state.chats.messages,
   }),  
   },
+  data() {
+    return {
+      message : null,
+    }
+  },
 
+  methods: {
+    
+    ...mapActions(['sendNewMessage']),
 
+    scrollMessages() {
+      setTimeout(() => {
+        this.$refs.messages.scrollTo({
+          top: this.$refs.messages.scrollHeight,
+          left: 0,
+          behavior: 'smooth'
+        });
+        
+      }, 10);
+    },
+    sendMessage() {
+      this.sendNewMessage(this.message)
+    }
+  },
+  watch: {
+    messages() {
+      this.scrollMessages();
+    },
+  }
 
   
 };

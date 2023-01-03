@@ -19,6 +19,10 @@ export default {
             state.messages = message;
         },
 
+        ADD_USER_MESSAGE(state, message) {
+            state.messages.push(message);
+        },
+
         CLEAR_USER_MESSAGES(state, message) {
             state.messages = null;
         },
@@ -31,7 +35,25 @@ export default {
             return axios
                 .get("/api/v1/messages/" + state.userConversation.id)
                 .then((response) => {
+                    // console.log(response.data.data);
                     commit("ADD_USER_MESSAGES", response.data.data);
+                });
+        },
+
+        async sendNewMessage({ state, commit }, message) {
+            return axios
+                .post("/api/v1/messages/create", {
+                    message,
+                    receiver_id: state.userConversation.id,
+                })
+                .then((response) => {
+                    commit("ADD_USER_MESSAGE", {
+                        message: message,
+                        me: true,
+                        receiver_id: state.userConversation.receiver_id,
+                    });
+
+                    // state.messages.push();
                 });
         },
     },

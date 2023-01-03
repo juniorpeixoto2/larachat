@@ -19,7 +19,7 @@ class MessagesResource extends JsonResource {
             'receiver_id' => $this->receiver_id,
             'message' => $this->message,
             'created_at' => $this->created_at,
-            'me' => auth()->user()->id == $this->sender_id,
+            'me' => auth()->user()->id == $this->sender_id ? true : false,
         ];
     }
 }
